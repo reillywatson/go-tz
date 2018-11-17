@@ -1,6 +1,6 @@
 #!/bin/bash
 
-release="2018d"
+release="2018g"
 file="timezones.geojson.zip"
 
 wget "https://github.com/evansiroky/timezone-boundary-builder/releases/download/${release}/${file}"
