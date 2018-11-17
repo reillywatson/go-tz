@@ -29,6 +29,23 @@ func TestGetZone(t *testing.T) {
 		t.Error("Zone not Asia/Tokyo but", zone[0])
 	}
 	fmt.Println(zone, time.Since(start))
+	//Test Urumqi
+	p = Point{87.319461, 43.419754}
+	start = time.Now()
+	zone, err = GetZone(p)
+	if len(zone) < 2 {
+		t.Error("didn't detect overlapping zone in Urumqi")
+	}
+	if err != nil {
+		t.Error("Could not find Asia/Shanghai Asia/Urumqi")
+	}
+	if zone[0] != "Asia/Shanghai" {
+		t.Error("Zone not Asia/Shanghai but", zone[0])
+	}
+	if zone[1] != "Asia/Urumqi" {
+		t.Error("Zone not Asia/Urumqi but", zone[0])
+	}
+	fmt.Println(zone, time.Since(start))
 	//Tuvalu testing center cache
 	p = Point{178.1167698, -7.768959}
 	start = time.Now()
