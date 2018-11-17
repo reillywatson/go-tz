@@ -39,10 +39,10 @@ func TestGetZone(t *testing.T) {
 	if err != nil {
 		t.Error("Could not find Asia/Shanghai Asia/Urumqi")
 	}
-	if zone[0] != "Asia/Shanghai" {
+	if len(zone) > 0 && zone[0] != "Asia/Shanghai" {
 		t.Error("Zone not Asia/Shanghai but", zone[0])
 	}
-	if zone[1] != "Asia/Urumqi" {
+	if len(zone) > 1 && zone[1] != "Asia/Urumqi" {
 		t.Error("Zone not Asia/Urumqi but", zone[0])
 	}
 	fmt.Println(zone, time.Since(start))
