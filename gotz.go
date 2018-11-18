@@ -29,6 +29,10 @@ import (
 )
 
 func init() {
+	load()
+}
+
+func load() {
 	data, err := getAsset("reduced/reduced.json")
 	if err != nil {
 		panic(err)
@@ -130,8 +134,10 @@ func LoadGeoJSON(r io.Reader) error {
 	tzdata = FeatureCollection{}
 	err := json.NewDecoder(r).Decode(&tzdata)
 	if err != nil {
+		load()
 		return err
 	}
 	buildCenterCache()
+	debug.FreeOSMemory()
 	return nil
 }
