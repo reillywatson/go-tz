@@ -40,9 +40,9 @@ GeoJson Simplification done with [mapshaper](http://mapshaper.org/)
 ## Problems
 
 * Shapefile is simplified using a lossy method so it may be innacurate along the borders
-* This is purerly in-memory. Uses ~32MB of ram
+* This is purerly in-memory. Uses ~50MB of ram
 * Nautical timezones are not included for practical reasons
 
-
 ## License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz?ref=badge_large)
