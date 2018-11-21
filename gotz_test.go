@@ -68,10 +68,15 @@ func TestGetZone(t *testing.T) {
 }
 
 func BenchmarkZones(b *testing.B) {
-	for n := 0; n < b.N; n++ {
+Loop:
+	for n := 0; n < b.N; {
 		for _, v := range centerCache {
 			for i := range v {
+				if n > b.N {
+					break Loop
+				}
 				GetZone(v[i])
+				n++
 			}
 		}
 	}
