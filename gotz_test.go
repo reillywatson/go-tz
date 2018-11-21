@@ -67,6 +67,16 @@ func TestGetZone(t *testing.T) {
 	fmt.Println("Not found", time.Since(start))
 }
 
+func BenchmarkZones(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		for _, v := range centerCache {
+			for i := range v {
+				GetZone(v[i])
+			}
+		}
+	}
+}
+
 func ExampleGetZone() {
 	// Loading Zone for Line Islands, Kiritimati
 	p := Point{
