@@ -59,7 +59,7 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 			return err
 		}
 		//Create a bounding box
-		pol := make([]Point, 0, 50)
+		pol := make([]Point, 0, len(jPolygon.Coordinates[0]))
 		for _, v := range jPolygon.Coordinates[0] {
 			pol = append(pol, Point{v[0], v[1]})
 		}
@@ -74,7 +74,7 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 			return err
 		}
 		for _, poly := range jMultiPolygon.Coordinates {
-			pol := make([]Point, 0, 50)
+			pol := make([]Point, 0, len(poly[0]))
 			for _, v := range poly[0] {
 				pol = append(pol, Point{v[0], v[1]})
 			}
