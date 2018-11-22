@@ -21,6 +21,8 @@
 package gotz
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"errors"
 	"io"
@@ -33,11 +35,13 @@ func init() {
 }
 
 func load() {
-	data, err := getAsset("reduced/reduced.json")
+	g, err := gzip.NewReader(bytes.NewBuffer(_reducedReducedJson))
 	if err != nil {
 		panic(err)
 	}
-	if err := json.Unmarshal(data, &tzdata); err != nil {
+	defer g.Close()
+
+	if err := json.NewDecoder(g).Decode(&tzdata); err != nil {
 		panic(err)
 	}
 	buildCenterCache()
