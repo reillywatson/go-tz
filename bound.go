@@ -2,8 +2,6 @@ package gotz
 
 import "math"
 
-// TODO: add benchmarks
-
 func getBoundingBox(points []Point) []Point {
 	if len(points) == 0 {
 		return []Point{{0, 0}, {0, 0}}

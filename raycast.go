@@ -17,10 +17,6 @@ func (p polygon) centroid() Point {
 	return Point{x / numPoints, y / numPoints}
 }
 
-// Returns whether or not the polygon is closed.
-// TODO:  This can obviously be improved, but for now,
-//        this should be sufficient for detecting if points
-//        are contained using the raycast algorithm.
 func (p polygon) isClosed() bool {
 	if len(p) < 3 {
 		return false

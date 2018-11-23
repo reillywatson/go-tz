@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetZone(t *testing.T) {
-	//Europe/Riga
+	//Test Riga
 	p := Point{24.105078, 56.946285}
 	start := time.Now()
 	zone, err := GetZone(p)

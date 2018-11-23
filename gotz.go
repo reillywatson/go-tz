@@ -74,7 +74,6 @@ func GetZone(p Point) (tzid []string, err error) {
 		polys := v.Geometry.Coordinates
 		for i := 0; i < len(polys); i += 2 {
 			//Check bounding box first
-			//Massive speedup
 			if !inBoundingBox(polys[i], &p) {
 				continue
 			}
