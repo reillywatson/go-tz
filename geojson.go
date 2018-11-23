@@ -2,10 +2,7 @@ package gotz
 
 import (
 	"encoding/json"
-	"errors"
 )
-
-var errNoTZID = errors.New("tzid for feature not found")
 
 type FeatureCollection struct {
 	featureCollection
@@ -32,20 +29,20 @@ type Geometry struct {
 
 type geometry struct {
 	Type        string    `json:"type"`
-	Coordinates [][]Point `json:"coordinates,omitempty"`
+	Coordinates [][]Point `json:"coordinates"`
 }
 
 var jPolyType struct {
 	Type       string      `json:"type"`
-	Geometries []*Geometry `json:"geometries,omitempty"`
+	Geometries []*Geometry `json:"geometries"`
 }
 
 var jPolygon struct {
-	Coordinates [][][]float64 `json:"coordinates,omitempty"`
+	Coordinates [][][]float64 `json:"coordinates"`
 }
 
 var jMultiPolygon struct {
-	Coordinates [][][][]float64 `json:"coordinates,omitempty"`
+	Coordinates [][][][]float64 `json:"coordinates"`
 }
 
 func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
@@ -59,13 +56,13 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 			return err
 		}
 		//Create a bounding box
-		pol := make([]Point, 0, len(jPolygon.Coordinates[0]))
-		for _, v := range jPolygon.Coordinates[0] {
-			pol = append(pol, Point{v[0], v[1]})
+		pol := make([]Point, len(jPolygon.Coordinates[0]))
+		for i, v := range jPolygon.Coordinates[0] {
+			pol[i].Lon = v[0]
+			pol[i].Lat = v[1]
 		}
 		b := getBoundingBox(pol)
-		g.Coordinates = append(g.Coordinates, b)
-		g.Coordinates = append(g.Coordinates, pol)
+		g.Coordinates = append(g.Coordinates, b, pol)
 		return nil
 	}
 
@@ -74,13 +71,13 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 			return err
 		}
 		for _, poly := range jMultiPolygon.Coordinates {
-			pol := make([]Point, 0, len(poly[0]))
-			for _, v := range poly[0] {
-				pol = append(pol, Point{v[0], v[1]})
+			pol := make([]Point, len(poly[0]))
+			for i, v := range poly[0] {
+				pol[i].Lon = v[0]
+				pol[i].Lat = v[1]
 			}
 			b := getBoundingBox(pol)
-			g.Coordinates = append(g.Coordinates, b)
-			g.Coordinates = append(g.Coordinates, pol)
+			g.Coordinates = append(g.Coordinates, b, pol)
 		}
 		return nil
 	}
