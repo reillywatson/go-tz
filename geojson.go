@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 )
 
+// FeatureCollection ...
 type FeatureCollection struct {
 	featureCollection
 }
@@ -12,6 +13,7 @@ type featureCollection struct {
 	Features []*Feature `json:"features"`
 }
 
+//Feature ...
 type Feature struct {
 	feature
 }
@@ -23,6 +25,7 @@ type feature struct {
 	} `json:"properties"`
 }
 
+//Geometry ...
 type Geometry struct {
 	geometry
 }
@@ -45,6 +48,7 @@ var jMultiPolygon struct {
 	Coordinates [][][][]float64 `json:"coordinates"`
 }
 
+//UnmarshalJSON ...
 func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 	if err := json.Unmarshal(data, &jPolyType); err != nil {
 		return err

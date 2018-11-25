@@ -1,4 +1,4 @@
-// Timezone lookup for a given location
+// Package gotz provides timezone lookup for a given location
 //
 // Features
 //
@@ -35,7 +35,7 @@ func init() {
 }
 
 func load() {
-	g, err := gzip.NewReader(bytes.NewBuffer(_reducedReducedJson))
+	g, err := gzip.NewReader(bytes.NewBuffer(tzShapeFile))
 	if err != nil {
 		panic(err)
 	}

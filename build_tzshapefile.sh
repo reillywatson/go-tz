@@ -9,11 +9,9 @@ unzip "${file}"
 mkdir "reduced"
 mapshaper -i dist/combined.json -simplify visvalingam 20% -o reduced/reduced.json
 
-git clone "https://github.com/ugjka/go-bindata.git"
-go build -o builder go-bindata/go-bindata/*.go
-./builder -pkg gotz -o tzshapefile.go reduced/
+go build -o builder tzgen/main.go
+./builder -file reduced/reduced.json
 
 rm "${file}"
 rm "dist/combined.json" "reduced/reduced.json" "builder"
 rmdir "dist" "reduced"
-rm -rf "go-bindata"
