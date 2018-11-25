@@ -9,7 +9,7 @@ unzip "${file}"
 mkdir "reduced"
 mapshaper -i dist/combined.json -simplify visvalingam 20% -o reduced/reduced.json
 
-go build -o builder tzgen/main.go
+go build -o builder tzshapefilegen/main.go
 ./builder -file reduced/reduced.json
 
 rm "${file}"
