@@ -34,14 +34,11 @@ func main() {
 		log.Printf("could not copy data: %v\n", err)
 		return
 	}
-	log.Println("GZIPPED")
 	if err := g.Flush(); err != nil {
 		log.Printf("could not flush gzip: %v\n", err)
 		return
 	}
 	str := buf.Bytes()
-	fmt.Println(str[:20])
-	log.Println("TO BYTES")
 	out := bytes.NewBuffer([]byte{})
 	for i := range str {
 		if int(str[i]) < 16 {
@@ -50,12 +47,10 @@ func main() {
 			out.WriteString("\\x" + fmt.Sprintf("%X", str[i]))
 		}
 	}
-	fmt.Println("FOR LOOP")
 	var template = `package gotz
 
 var %s = []byte("%s")
 `
-	log.Println("SPLIT")
 	content := fmt.Sprintf(template, *name, out)
 	fout, err := os.Create("tzshapefile.go")
 	if err != nil {
