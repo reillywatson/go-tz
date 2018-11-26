@@ -43,6 +43,10 @@ GeoJson Simplification done with [mapshaper](http://mapshaper.org/)
 * This is purerly in-memory. Uses ~50MB of ram
 * Nautical timezones are not included for practical reasons
 
-## License
+## Licenses
+
+The code used to lookup the timezone for a location is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+The data in timezone shapefile is licensed under the [Open Data Commons Open Database License (ODbL)](http://opendatacommons.org/licenses/odbl/).
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz?ref=badge_large)
