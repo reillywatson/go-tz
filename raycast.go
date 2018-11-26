@@ -34,10 +34,10 @@ func (p polygon) contains(point *Point) bool {
 	start := len(p) - 1
 	end := 0
 
-	contains := p.intersectsWithRaycast(point, &p[start], &p[end])
+	contains := intersectsWithRaycast(point, &p[start], &p[end])
 
 	for i := 1; i < len(p); i++ {
-		if p.intersectsWithRaycast(point, &p[i-1], &p[i]) {
+		if intersectsWithRaycast(point, &p[i-1], &p[i]) {
 			contains = !contains
 		}
 	}
@@ -45,7 +45,7 @@ func (p polygon) contains(point *Point) bool {
 	return contains
 }
 
-func (p polygon) intersectsWithRaycast(point, start, end *Point) bool {
+func intersectsWithRaycast(point, start, end *Point) bool {
 	return (start.Lon > point.Lon) != (end.Lon > point.Lon) &&
 		point.Lat < (end.Lat-start.Lat)*(point.Lon-start.Lon)/(end.Lon-start.Lon)+start.Lat
 }

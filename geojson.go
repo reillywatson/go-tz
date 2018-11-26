@@ -60,7 +60,6 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 		if err := json.Unmarshal(data, &jPolygon); err != nil {
 			return err
 		}
-		//Create a bounding box
 		pol := make([]Point, len(jPolygon.Coordinates[0]))
 		for i, v := range jPolygon.Coordinates[0] {
 			pol[i].Lon = v[0]
