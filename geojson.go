@@ -73,15 +73,17 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 		if err := json.Unmarshal(data, &jMultiPolygon); err != nil {
 			return err
 		}
-		for _, poly := range jMultiPolygon.Coordinates {
+		g.BoundingBoxes = make([][]Point, len(jMultiPolygon.Coordinates))
+		g.Coordinates = make([][]Point, len(jMultiPolygon.Coordinates))
+		for j, poly := range jMultiPolygon.Coordinates {
 			pol := make([]Point, len(poly[0]))
 			for i, v := range poly[0] {
 				pol[i].Lon = v[0]
 				pol[i].Lat = v[1]
 			}
 			b := getBoundingBox(pol)
-			g.BoundingBoxes = append(g.BoundingBoxes, b)
-			g.Coordinates = append(g.Coordinates, pol)
+			g.BoundingBoxes[j] = b
+			g.Coordinates[j] = pol
 		}
 		return nil
 	}
