@@ -31,8 +31,9 @@ type Geometry struct {
 }
 
 type geometry struct {
-	Type        string    `json:"type"`
-	Coordinates [][]Point `json:"coordinates"`
+	Type          string    `json:"type"`
+	Coordinates   [][]Point `json:"coordinates"`
+	BoundingBoxes [][]Point
 }
 
 var jPolyType struct {
@@ -66,7 +67,8 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 			pol[i].Lat = v[1]
 		}
 		b := getBoundingBox(pol)
-		g.Coordinates = append(g.Coordinates, b, pol)
+		g.BoundingBoxes = append(g.BoundingBoxes, b)
+		g.Coordinates = append(g.Coordinates, pol)
 		return nil
 	}
 
@@ -81,7 +83,8 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 				pol[i].Lat = v[1]
 			}
 			b := getBoundingBox(pol)
-			g.Coordinates = append(g.Coordinates, b, pol)
+			g.BoundingBoxes = append(g.BoundingBoxes, b)
+			g.Coordinates = append(g.Coordinates, pol)
 		}
 		return nil
 	}

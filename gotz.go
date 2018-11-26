@@ -72,12 +72,13 @@ func GetZone(p Point) (tzid []string, err error) {
 		}
 		id = v.Properties.Tzid
 		polys := v.Geometry.Coordinates
-		for i := 0; i < len(polys); i += 2 {
+		bboxes := v.Geometry.BoundingBoxes
+		for i := 0; i < len(polys); i++ {
 			//Check bounding box first
-			if !inBoundingBox(polys[i], &p) {
+			if !inBoundingBox(bboxes[i], &p) {
 				continue
 			}
-			if polygon(polys[i+1]).contains(&p) {
+			if polygon(polys[i]).contains(&p) {
 				tzid = append(tzid, id)
 			}
 		}
