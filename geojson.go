@@ -10,7 +10,7 @@ type FeatureCollection struct {
 }
 
 type featureCollection struct {
-	Features []*Feature `json:"features"`
+	Features []*Feature
 }
 
 //Feature ...
@@ -19,10 +19,10 @@ type Feature struct {
 }
 
 type feature struct {
-	Geometry   Geometry `json:"geometry"`
+	Geometry   Geometry
 	Properties struct {
-		Tzid string `json:"tzid"`
-	} `json:"properties"`
+		Tzid string
+	}
 }
 
 //Geometry ...
@@ -31,22 +31,22 @@ type Geometry struct {
 }
 
 type geometry struct {
-	Type          string    `json:"type"`
-	Coordinates   [][]Point `json:"coordinates"`
+	Type          string
+	Coordinates   [][]Point
 	BoundingBoxes [][]Point
 }
 
 var jPolyType struct {
-	Type       string      `json:"type"`
-	Geometries []*Geometry `json:"geometries"`
+	Type       string
+	Geometries []*Geometry
 }
 
 var jPolygon struct {
-	Coordinates [][][]float64 `json:"coordinates"`
+	Coordinates [][][]float64
 }
 
 var jMultiPolygon struct {
-	Coordinates [][][][]float64 `json:"coordinates"`
+	Coordinates [][][][]float64
 }
 
 //UnmarshalJSON ...
