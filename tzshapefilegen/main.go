@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"sync"
 	"time"
 
 	"github.com/machinebox/progress"
@@ -43,22 +44,31 @@ func main() {
 
 	r := progress.NewReader(resp.Body)
 	size := resp.ContentLength
+	wg := sync.WaitGroup{}
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	wg.Add(1)
 	go func() {
-		ctx := context.Background()
+		defer wg.Done()
 		progressChan := progress.NewTicker(ctx, r, size, time.Second)
 		fmt.Println("Downloading timezone shape file", *release)
 		for p := range progressChan {
 			fmt.Printf("\r%v  Remaining...", p.Remaining().Round(time.Second))
 		}
+		fmt.Println("")
 	}()
 
 	releaseZipBuf := bytes.NewBuffer([]byte{})
 	_, err = io.Copy(releaseZipBuf, r)
-	fmt.Println("")
 	if err != nil {
+		cancel()
+		wg.Wait()
 		log.Printf("Download failed: %v\n", err)
 		return
 	}
+	wg.Wait()
+	cancel()
+
 	releaseZipReadBuf := bytes.NewReader(releaseZipBuf.Bytes())
 	z, err := zip.NewReader(releaseZipReadBuf, size)
 	if err != nil {
@@ -99,19 +109,19 @@ func main() {
 
 	combinedJSON, err := os.Create("./combined.json")
 	if err != nil {
-		combinedJSON.Close()
 		log.Printf("Error: could not create combinedJSON file: %v\n", err)
 		return
 	}
 
 	_, err = io.Copy(combinedJSON, combinedJSONZip)
 	if err != nil {
+		combinedJSON.Close()
 		log.Printf("Error: could not copy from zip to combined.json: %v\n", err)
 		return
 	}
 	combinedJSON.Close()
 
-	fmt.Println("\n*** RUNNING MAPSHAPER ***")
+	fmt.Println("*** RUNNING MAPSHAPER ***")
 	mapshaper := exec.Command("mapshaper", "-i", "combined.json", "-simplify", "visvalingam", "20%", "-o", "reduced.json")
 	mapshaper.Stdout = os.Stdout
 	mapshaper.Stderr = os.Stderr
@@ -120,7 +130,8 @@ func main() {
 		log.Printf("Error: could not run mapshaper: %v\n", err)
 		return
 	}
-	fmt.Println("\n*** MAPSHAPER FINISHED ***")
+	fmt.Println("*** MAPSHAPER FINISHED ***")
+
 	fmt.Println("*** GENERATING GO CODE ***")
 	f, err := os.Open("reduced.json")
 	if err != nil {
