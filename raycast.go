@@ -49,6 +49,7 @@ func (p polygon) contains(point *Point) bool {
 	return contains
 }
 
+// https://rosettacode.org/wiki/Ray-casting_algorithm#Go
 func intersectsWithRaycast(point, start, end *Point) bool {
 	if start.Lat > end.Lat {
 		start, end = end, start
