@@ -47,7 +47,7 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	r := progress.NewReader(resp.Body)
+	respBody := progress.NewReader(resp.Body)
 	size := resp.ContentLength
 	wg := sync.WaitGroup{}
 	ctx := context.Background()
@@ -55,7 +55,7 @@ func main() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		progressChan := progress.NewTicker(ctx, r, size, time.Second)
+		progressChan := progress.NewTicker(ctx, respBody, size, time.Second)
 		fmt.Println("Downloading timezone shape file", *release)
 		for p := range progressChan {
 			fmt.Printf("\r%v  Remaining...", p.Remaining().Round(time.Second))
@@ -63,8 +63,8 @@ func main() {
 		fmt.Println("")
 	}()
 
-	releaseZipBuf := bytes.NewBuffer([]byte{})
-	_, err = io.Copy(releaseZipBuf, r)
+	buffer := bytes.NewBuffer([]byte{})
+	_, err = io.Copy(buffer, respBody)
 	if err != nil {
 		cancel()
 		wg.Wait()
@@ -74,21 +74,21 @@ func main() {
 	wg.Wait()
 	cancel()
 
-	releaseZipReadBuf := bytes.NewReader(releaseZipBuf.Bytes())
-	z, err := zip.NewReader(releaseZipReadBuf, size)
+	bufferReader := bytes.NewReader(buffer.Bytes())
+	zipReader, err := zip.NewReader(bufferReader, size)
 	if err != nil {
 		log.Printf("Could not access zipfile: %v\n", err)
 		return
 	}
-	if len(z.File) == 0 {
+	if len(zipReader.File) == 0 {
 		log.Println("Error: release zip file have no files!")
 		return
-	} else if z.File[0].Name != "dist/combined.json" {
+	} else if zipReader.File[0].Name != "dist/combined.json" {
 		log.Println("Error: first file in zip file is not dist/combined.json")
 		return
 	}
 
-	combinedJSONZip, err := z.File[0].Open()
+	geojsonData, err := zipReader.File[0].Open()
 	if err != nil {
 		log.Printf("Error: could not read from zip file: %v\n", err)
 		return
@@ -112,19 +112,19 @@ func main() {
 		return
 	}
 
-	combinedJSON, err := os.Create("./combined.json")
+	geojsonFile, err := os.Create("./combined.json")
 	if err != nil {
 		log.Printf("Error: could not create combinedJSON file: %v\n", err)
 		return
 	}
 
-	_, err = io.Copy(combinedJSON, combinedJSONZip)
+	_, err = io.Copy(geojsonFile, geojsonData)
 	if err != nil {
-		combinedJSON.Close()
+		geojsonFile.Close()
 		log.Printf("Error: could not copy from zip to combined.json: %v\n", err)
 		return
 	}
-	combinedJSON.Close()
+	geojsonFile.Close()
 
 	fmt.Println("*** RUNNING MAPSHAPER ***")
 	mapshaper := exec.Command("mapshaper", "-i", "combined.json", "-simplify", "visvalingam", "20%", "-o", "reduced.json")
@@ -138,41 +138,39 @@ func main() {
 	fmt.Println("*** MAPSHAPER FINISHED ***")
 
 	fmt.Println("*** GENERATING GO CODE ***")
-	f, err := os.Open("reduced.json")
+	reducedFile, err := os.Open("reduced.json")
 	if err != nil {
 		log.Printf("Error: could not open file: %v\n", err)
 		return
 	}
-	defer f.Close()
+	defer reducedFile.Close()
 
-	buf := bytes.NewBuffer([]byte{})
-	g, err := gzip.NewWriterLevel(buf, gzip.BestCompression)
+	buffer = bytes.NewBuffer([]byte{})
+	gzipper, err := gzip.NewWriterLevel(buffer, gzip.BestCompression)
 	if err != nil {
 		log.Printf("Error: could not create gzip writer: %v\n", err)
 		return
 	}
-	defer g.Close()
 
-	_, err = io.Copy(g, f)
+	_, err = io.Copy(gzipper, reducedFile)
 	if err != nil {
 		log.Printf("Error: could not copy data: %v\n", err)
 		return
 	}
-	if err := g.Flush(); err != nil {
-		log.Printf("Error: could not flush gzip: %v\n", err)
+	if err := gzipper.Close(); err != nil {
+		log.Printf("Error: could not flush/close gzip: %v\n", err)
 		return
 	}
 
-	data := buf.Bytes()
-	hexStr := bytes.NewBuffer([]byte{})
-	for i := range data {
-		if int(data[i]) < 16 {
-			hexStr.WriteString("\\x" + fmt.Sprintf("0%X", data[i]))
+	hexEncoded := bytes.NewBuffer([]byte{})
+	for _, v := range buffer.Bytes() {
+		if int(v) < 16 {
+			hexEncoded.WriteString("\\x" + fmt.Sprintf("0%X", v))
 		} else {
-			hexStr.WriteString("\\x" + fmt.Sprintf("%X", data[i]))
+			hexEncoded.WriteString("\\x" + fmt.Sprintf("%X", v))
 		}
 	}
-	content := fmt.Sprintf(template, varName, hexStr)
+	varContent := fmt.Sprintf(template, varName, hexEncoded)
 
 	err = os.Chdir(currDir)
 	if err != nil {
@@ -180,14 +178,14 @@ func main() {
 		return
 	}
 
-	fout, err := os.Create("tzshapefile.go")
+	outfile, err := os.Create("tzshapefile.go")
 	if err != nil {
 		log.Printf("Error: could not create tzshapefile.go: %v", err)
 		return
 	}
-	defer fout.Close()
+	defer outfile.Close()
 
-	_, err = fout.WriteString(content)
+	_, err = outfile.WriteString(varContent)
 	if err != nil {
 		log.Printf("Error: could not write content: %v", err)
 		return
