@@ -1,5 +1,9 @@
 package gotz
 
+import (
+	"math"
+)
+
 type polygon []Point
 
 func newPoint(lon, lat *float64) *Point {
@@ -46,6 +50,29 @@ func (p polygon) contains(point *Point) bool {
 }
 
 func intersectsWithRaycast(point, start, end *Point) bool {
-	return (start.Lon > point.Lon) != (end.Lon > point.Lon) &&
-		point.Lat < (end.Lat-start.Lat)*(point.Lon-start.Lon)/(end.Lon-start.Lon)+start.Lat
+	if start.Lat > end.Lat {
+		start, end = end, start
+	}
+	for point.Lat == start.Lat || point.Lat == end.Lat {
+		point.Lat = math.Nextafter(point.Lat, math.Inf(1))
+	}
+	if point.Lat < start.Lat || point.Lat > end.Lat {
+		return false
+	}
+	if start.Lon > end.Lon {
+		if point.Lon > start.Lon {
+			return false
+		}
+		if point.Lon < end.Lon {
+			return true
+		}
+	} else {
+		if point.Lon > end.Lon {
+			return false
+		}
+		if point.Lon < start.Lon {
+			return true
+		}
+	}
+	return (point.Lat-start.Lat)/(point.Lon-start.Lon) >= (end.Lat-start.Lat)/(end.Lon-start.Lon)
 }
