@@ -170,7 +170,7 @@ func main() {
 			hexEncoded.WriteString("\\x" + fmt.Sprintf("%X", v))
 		}
 	}
-	varContent := fmt.Sprintf(template, varName, hexEncoded)
+	content := fmt.Sprintf(template, varName, hexEncoded)
 
 	err = os.Chdir(currDir)
 	if err != nil {
@@ -185,7 +185,7 @@ func main() {
 	}
 	defer outfile.Close()
 
-	_, err = outfile.WriteString(varContent)
+	_, err = outfile.WriteString(content)
 	if err != nil {
 		log.Printf("Error: could not write content: %v", err)
 		return
