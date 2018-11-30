@@ -12,7 +12,9 @@ lookup timezone for a given location
 
 ```go
 // Loading Zone for Line Islands, Kiritimati
-zone, err := gotz.GetZone(gotz.Point{
+import "github.com/ugjka/go-tz/tz"
+
+zone, err := tz.GetZone(tz.Point{
     Lon: -157.21328, Lat: 1.74294,
 })
 if err != nil {
