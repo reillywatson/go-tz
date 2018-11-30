@@ -6,7 +6,6 @@ tz-lookup by lon and lat
 [![Go Report Card](https://goreportcard.com/badge/gopkg.in/ugjka/go-tz.v2)](https://goreportcard.com/report/gopkg.in/ugjka/go-tz.v2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Donate](https://dl.ugjka.net/Donate-PayPal-green.svg)](https://www.paypal.me/ugjka)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz?ref=badge_shield)
 
 lookup timezone for a given location
 
@@ -55,5 +54,3 @@ GeoJson Simplification done with [mapshaper](http://mapshaper.org/)
 The code used to lookup the timezone for a location is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 The data in timezone shapefile is licensed under the [Open Data Commons Open Database License (ODbL)](http://opendatacommons.org/licenses/odbl/).
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz?ref=badge_large)
