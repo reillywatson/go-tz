@@ -10,9 +10,16 @@ tz-lookup by lon and lat
 
 lookup timezone for a given location
 
+## Usage
+
+```go
+import "gopkg.in/ugjka/go-tz.v2/tz"
+```
+### Example
+
 ```go
 // Loading Zone for Line Islands, Kiritimati
-zone, err := gotz.GetZone(gotz.Point{
+zone, err := tz.GetZone(tz.Point{
     Lon: -157.21328, Lat: 1.74294,
 })
 if err != nil {
