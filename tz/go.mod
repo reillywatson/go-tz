@@ -1,4 +1,4 @@
-module github.com/ugjka/go-tz
+module github.com/ugjka/go-tz/tz
 
 require (
 	github.com/machinebox/progress v0.2.0
