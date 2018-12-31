@@ -164,11 +164,7 @@ func main() {
 
 	hexEncoded := bytes.NewBuffer([]byte{})
 	for _, v := range buffer.Bytes() {
-		if int(v) < 16 {
-			hexEncoded.WriteString("\\x" + fmt.Sprintf("0%X", v))
-		} else {
-			hexEncoded.WriteString("\\x" + fmt.Sprintf("%X", v))
-		}
+		hexEncoded.WriteString("\\x" + fmt.Sprintf("%02X", v))
 	}
 	content := fmt.Sprintf(template, varName, hexEncoded)
 
