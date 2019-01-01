@@ -1,6 +1,7 @@
 package tz
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -51,8 +52,8 @@ var tt = []struct {
 		"Baker Island",
 		Point{-176.474331436, 0.190165906},
 		result{
-			zones: nil,
-			err:   ErrNoZoneFound,
+			zones: []string{"Etc/GMT-12"},
+			err:   nil,
 		},
 	},
 }
@@ -102,4 +103,32 @@ func BenchmarkZones(b *testing.B) {
 
 		}
 	})
+}
+
+func TestNautical(t *testing.T) {
+	tt := []struct {
+		lon  float64
+		zone string
+	}{
+		{-180, "Etc/GMT-12"},
+		{180, "Etc/GMT+12"},
+		{-172.5, "Etc/GMT-12"},
+		{172.5, "Etc/GMT+12"},
+		{-172, "Etc/GMT-11"},
+		{172, "Etc/GMT+11"},
+		{0, "Etc/GMT"},
+		{7.49, "Etc/GMT"},
+		{-7.49, "Etc/GMT"},
+		{7.5, "Etc/GMT+1"},
+		{-7.5, "Etc/GMT-1"},
+	}
+	_ = tt
+	for _, tc := range tt {
+		t.Run(fmt.Sprintf("%f %s", tc.lon, tc.zone), func(t *testing.T) {
+			z, _ := getNauticalZone(&Point{Lat: 0, Lon: tc.lon})
+			if z[0] != tc.zone {
+				t.Errorf("expected %s got %s", tc.zone, z[0])
+			}
+		})
+	}
 }
