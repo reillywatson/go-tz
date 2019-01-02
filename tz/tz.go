@@ -126,9 +126,9 @@ func getNauticalZone(point *Point) (tzid []string, err error) {
 		return append(tzid, "Etc/GMT"), nil
 	}
 	if point.Lon < 0 {
-		return append(tzid, fmt.Sprintf("Etc/GMT-%.f", z)), nil
+		return append(tzid, fmt.Sprintf("Etc/GMT+%.f", z)), nil
 	}
-	return append(tzid, fmt.Sprintf("Etc/GMT+%.f", z)), nil
+	return append(tzid, fmt.Sprintf("Etc/GMT-%.f", z)), nil
 }
 
 //BuildCenterCache builds centers for polygons

@@ -52,7 +52,7 @@ var tt = []struct {
 		"Baker Island",
 		Point{-176.474331436, 0.190165906},
 		result{
-			zones: []string{"Etc/GMT-12"},
+			zones: []string{"Etc/GMT+12"},
 			err:   nil,
 		},
 	},
@@ -110,17 +110,17 @@ func TestNautical(t *testing.T) {
 		lon  float64
 		zone string
 	}{
-		{-180, "Etc/GMT-12"},
-		{180, "Etc/GMT+12"},
-		{-172.5, "Etc/GMT-12"},
-		{172.5, "Etc/GMT+12"},
-		{-172, "Etc/GMT-11"},
-		{172, "Etc/GMT+11"},
+		{-180, "Etc/GMT+12"},
+		{180, "Etc/GMT-12"},
+		{-172.5, "Etc/GMT+12"},
+		{172.5, "Etc/GMT-12"},
+		{-172, "Etc/GMT+11"},
+		{172, "Etc/GMT-11"},
 		{0, "Etc/GMT"},
 		{7.49, "Etc/GMT"},
 		{-7.49, "Etc/GMT"},
-		{7.5, "Etc/GMT+1"},
-		{-7.5, "Etc/GMT-1"},
+		{7.5, "Etc/GMT-1"},
+		{-7.5, "Etc/GMT+1"},
 	}
 	_ = tt
 	for _, tc := range tt {
