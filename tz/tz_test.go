@@ -132,3 +132,27 @@ func TestNautical(t *testing.T) {
 		})
 	}
 }
+
+func TestOutOfRange(t *testing.T) {
+	tt := []struct {
+		p   Point
+		err error
+	}{
+		{Point{180, 0}, nil},
+		{Point{-180, 0}, nil},
+		{Point{0, 90}, nil},
+		{Point{0, -90}, nil},
+		{Point{181, 0}, ErrOutOfRange},
+		{Point{-181, 0}, ErrOutOfRange},
+		{Point{0, 91}, ErrOutOfRange},
+		{Point{0, -91}, ErrOutOfRange},
+	}
+	for _, tc := range tt {
+		t.Run(fmt.Sprintf("%f %f", tc.p.Lon, tc.p.Lat), func(t *testing.T) {
+			_, err := GetZone(tc.p)
+			if err != tc.err {
+				t.Errorf("expected error %v got %v", tc.err, err)
+			}
+		})
+	}
+}
