@@ -1,3 +1,3 @@
-//go:generate go run tzshapefilegen/main.go -release 2019a
+//go:generate go run tzshapefilegen/main.go -release 2019b
 
 package tz
