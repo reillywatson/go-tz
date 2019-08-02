@@ -1,5 +1,5 @@
 // Code generation tool for embedding the timezone shapefile in the gotz package
-// run "go generate" in the parent directory after changing the -release flag in gotz.go
+// run "go generate" in the parent directory after changing the -release flag in gen.go
 // You need mapshaper to be installed and it must be in your $PATH
 // More info on mapshaper: https://github.com/mbloch/mapshaper
 package main
