@@ -5,7 +5,7 @@ tz-lookup by lon and lat
 [![GoDoc](https://godoc.org/gopkg.in/ugjka/go-tz.v2?status.svg)](http://godoc.org/gopkg.in/ugjka/go-tz.v2/tz)
 [![Go Report Card](https://goreportcard.com/badge/gopkg.in/ugjka/go-tz.v2)](https://goreportcard.com/report/gopkg.in/ugjka/go-tz.v2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Donate](https://dl.ugjka.net/Donate-PayPal-green.svg)](https://www.paypal.me/ugjka)
+[![Donate](https://share.ugjka.net/paypal.svg)](https://www.paypal.me/ugjka)
 
 lookup timezone for a given location
 
