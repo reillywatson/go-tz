@@ -20,9 +20,11 @@ type Feature struct {
 
 type feature struct {
 	Geometry   Geometry
-	Properties struct {
-		Tzid string
-	}
+	Properties Properties
+}
+
+type Properties struct {
+	Tzid string
 }
 
 //Geometry ...

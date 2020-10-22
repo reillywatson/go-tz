@@ -18,8 +18,6 @@
 package tz
 
 import (
-	"bytes"
-	"compress/gzip"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -33,20 +31,8 @@ func init() {
 }
 
 func load() {
-	g, err := gzip.NewReader(bytes.NewBuffer(tzShapeFile))
-	if err != nil {
-		panic(err)
-	}
-	defer g.Close()
-
-	if err := json.NewDecoder(g).Decode(&tzdata); err != nil {
-		panic(err)
-	}
 	buildCenterCache()
-	debug.FreeOSMemory()
 }
-
-var tzdata FeatureCollection
 
 type centers map[string][]Point
 
